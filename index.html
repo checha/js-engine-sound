@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<script type="text/javascript" src="jquery.min.js"></script>
+		<script type="text/javascript" src="js-engine-sound.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var sd = new listSounds();
+				sd.add(['android2.mp3','android2.ogg'], 'sound1', function(err) {console.log('Error: '+err)});
+				
+				//setTimeout(function() {sd.play('sound1');}, 1000);
+				
+				//console.log(typeof Audio);
+				//$(document).bind('click',function(e) {console.log(typeof Audio);});
+				
+				$(document.body).append($('<div class="button">play</div>').bind('click', function() {sd.play('sound1');}));
+				$(document.body).append($('<div class="button">stop</div>').bind('click', function() {sd.stop('sound1');}));
+				$(document.body).append($('<div class="button"><span>stopPlay</span></div>').bind('mouseover', function() {
+					sd.stopPlay('sound1');
+					sd.mute('sound1',true);
+				}));
+				$('.button > span').bind('click', function() {
+					sd.pos('sound1');
+					sd.mute('sound1', false);
+				});
+				//$(document.body).append($('<div class="button">stopPlay</div>'));
+				
+			});
+		</script>
+		<style type="text/css">
+			.button {
+				display: inline-block;
+				border: 1px solid black;
+				padding: 50px 100px 50px 100px;
+				cursor: pointer;
+				margin-left: 5px;
+			}
+			.button > span {
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		
+	</body>
+</html>
