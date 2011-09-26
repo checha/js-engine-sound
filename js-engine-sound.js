@@ -1,6 +1,162 @@
 /*
  * http://www.thevista.ru/page13925-multimedia_v_stile_html_5_tegi_audio_i_video
  */
+function SoundSafari(options) {// {url:''}
+
+	options = options || {};
+	var self = this;
+	
+	var browser = {
+		safari: false,
+		msafari: false
+	};
+	
+	var so = {
+		sound: null,// экземпляр объекта Audio
+		complete: false,// уже можно работать с sound(new Audio())
+		scheme: {}
+	}
+	
+	function __construct(opts) {
+		// test safari mobile
+		var ua = navigator.userAgent;
+		if(/safari/i.test(ua) && /mobile/i.test(ua)) browser.msafari = true;
+		else if(/safari/i.test(ua)) browser.safari = true;
+		
+		if(!browser.safari && !browser.msafari) {
+			console.log('You browser is not "safari(mobile)"');
+			return;
+		}
+		
+		// test Audio
+		if(typeof Audio != 'function' && typeof Audio != 'object') {
+			console.log('Object: "Audio" - NOT FOUND');
+			return;
+		}
+		
+		// new Audio
+		so.sound = new Audio(opts['url']);
+		
+		// preload
+		preload(so.sound);
+		
+		// ready
+		//ready(so.sound);
+		so.sound.play();
+		
+		
+		// ready
+		//var ID = setInterval(function() {
+		//	if(so.sound.readyState == 'complete' || so.sound.readyState == 4) clearInterval(ID);
+		//	so.sound.play();
+		//}, 1);
+		
+		// timeupdate
+		so.sound.addEventListener('timeupdate', function() {
+			console.log('currentTime: '+so.sound.currentTime);
+		}, false);
+		
+		
+		// preload
+		/*
+		so.sound.autobuffer = true;
+		so.sound.preload = 'auto';
+		
+		if(browser.msafari) {
+			var f0 = function(e) {console.log('click');
+				_preload();
+				document.body.removeEventListener('click',f0);
+			}
+			document.documentElement.addEventListener('click', function() {console.log('click');});
+			//$(document.body).bind('click', function() {console.log('click');});
+		} else if(browser.safari) {
+			_preload();
+		}
+		*/
+	}
+	
+	self.loadSoundScheme = function(scheme) {// {name:{start:0.00, end:0.00}}
+		scheme = scheme || {};
+		for(var i in scheme) {
+			if(scheme[i] && typeof scheme[i].start == 'number' && typeof scheme[i].end == 'number') {
+				so.scheme[i] = {start: scheme[i].start, end: scheme[i].end}
+			}
+		}
+		console.log('Object scheme:');
+		console.log(so.scheme);
+	}
+	
+	self.play = function(name) {
+		
+	}
+	
+	self.pause = function(name) {
+		
+	}
+	
+	self.stop = function(name) {
+		
+	}
+	
+	self.stopPlay = function() {
+		
+	}
+	
+	// preload
+	function preload(audio) {
+		if(browser.msafari) {
+			var force = function () {
+  				audio.pause();
+  				audio.removeEventListener('play', force, false);
+			};
+			audio.addEventListener('play', force, false);
+			
+			var click = document.ontouchstart === undefined ? 'click' : 'touchstart';
+			var kickoff = function () {
+				audio.play();
+				document.documentElement.removeEventListener(click, kickoff, true);
+			};
+			document.documentElement.addEventListener(click, kickoff, true);
+		} else if(browser.safari) {
+			
+		}
+	}
+	
+	function ready(audio) {
+		var ID = setInterval(function() {
+			if(audio.readyState == 'complete' || audio.readyState == 4) clearInterval(ID);
+			audio.play();
+			console.log('ready!!!');
+		}, 1);
+	}
+	
+	
+	
+	
+	
+	// add preload
+	function _preload() {
+		console.log('preload');
+		so.sound.muted = true;
+		so.sound.play();
+		so.sound.addEventListener('canplay', function() {// loadeddata
+			so.sound.pause();
+			so.sound.currentTime = 0.001;
+			so.complete = true;
+			// loop!!!
+		}, false);
+	}
+	
+	// мютить через определенный промежуток времени
+	
+	
+	__construct(options);
+	
+}
+
+
+/*
+
 
 function listSounds(options) {
 	
@@ -173,3 +329,5 @@ function listSounds(options) {
 	__construct(options);
 	
 }
+
+*/

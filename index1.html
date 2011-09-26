@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<script type="text/javascript" src="jquery.min.js"></script>
+		<script type="text/javascript" src="js-engine-sound.js"></script>
+		<script type="text/javascript">
+			// create
+			var audio = new Audio('newachievement1.mp3');
+			
+			// play & loop
+			audio.addEventListener('canplay', function() {
+				//audio.muted = true;
+			}, false);
+			
+			//playing
+			audio.addEventListener('playing', function() {// playing, play
+				//audio.muted = true;
+				//setTimeout(function() {
+				//	audio.muted = true;
+				//}, 1);
+			}, false);
+			
+			audio.addEventListener('timeupdate', function() {
+				console.log('currentTime: '+audio.currentTime);
+			}, false);
+			
+			//$(document.body).append($('<h1>click</h1>').bind('click', function() {
+			//	audio.play();
+			//}));
+			
+			
+		</script>
+		<style type="text/css">
+			
+		</style>
+	</head>
+	<body>
+		<h1 onclick="audio.play();">click</h1>
+		<h1 onclick="audio.muted = true;">mute</h1>
+	</body>
+</html>
