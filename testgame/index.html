@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+  <!-- this is experimentation with ios mobilesafari flags -->
+  <!-- <meta name="apple-mobile-web-app-capable" content="yes" /> -->
+  <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black" /> -->
+  <!-- <meta name="viewport" content="user-scalable=no, width=device-width" /> -->
+    <head>
+
+	  <link rel="stylesheet" href="../framework/css/loader.css">
+	  <link rel="stylesheet" href="../framework/css/new_ui.css">
+<!--
+      <script>
+		params = {
+		sceneid: 'gamehere',
+		gameType: 3,
+		static_root: './',
+		one_time_token: '123qwe',
+		}
+	  </script>
+	  <script src="../js/json.js"></script>
+	  <script src="../framework/right/right.js"></script>
+	  <script src="../framework/timer.js"></script>
+	  <script src="../framework/settings.js"></script>
+	  <script src="../framework/sounds.js"></script>
+	  <script src="../js/network.js"></script>
+      <script src="../framework/preload.js"></script>
+      <script src="../framework/speedtest.js"></script>
+	  <script src="../js/flashsocket.js"></script>
+	  <script src="../framework/figures.js"></script>
+	  <script src="index.js"></script>
+	  <script src="../framework/createGame.js"></script>
+-->
+		<script src="jquery.min.js"></script>
+		<script type="text/javascript">
+
+			function CSound(filename) {
+				
+				var audio = null;
+				var _stop = false;
+				var self = this;
+
+				function create(filename) {
+					audio = new Audio(filename);
+					audio.autoplay = false;
+					audio.preload = 'auto';
+					audio.load();
+				}
+				
+				function destroy() {
+					audio = null;
+				}
+				
+				function loophandler() {
+					if(_stop) return;
+					audio.currentTime = 0;
+					this.play();
+				}
+				
+				create(filename);
+				
+				this.play = function() {
+					_stop = false;
+					if(audio === null) audio = new Audio(filename);
+					audio.play();
+				}
+				
+				this.stop = function() {
+					_stop = true;
+					audio.pause();
+					audio.currentTime = 0;
+				}
+				
+				this.mute = function(st) {
+					audio.muted = st?true:false;
+				}
+				
+				this.pause = function() {
+					audio.pause();
+				}
+				
+				this.loop = function(st) {				
+					if(st) {
+						if(audio && typeof audio.loop == 'boolean') {
+							audio.loop = true;
+						} else {
+							audio.addEventListener('ended', loophandler, false);
+						}
+					} else {
+						if(audio && typeof audio.loop == 'boolean') {
+							audio.loop = false;
+						} else {
+							audio.removeEventListener('ended', loophandler, false);
+						}
+					}
+				}
+				
+				this.stopPlay = function() {
+					self.loop(false);
+					audio.pause();
+					audio.currentTime = 0;
+					audio.play();
+				}
+				
+			}
+			/*
+			function CSoundS(url) {
+			
+			    var audio = null;
+				var _stop = false;
+				var self = this;
+			    
+			    function create(url) {
+			        audio = document.createElement('audio');
+			        var id;
+			        if(!document.body) {
+			            id = setInterval(function() {
+			                if(!document.body) return; else {clearInterval(id); _create();}
+			            }, 0);
+			        } else {
+			            _create();
+			        }
+			    }
+			    
+			    function _create() {
+			        document.body.appendChild(audio);
+			        audio.src = url;
+			        audio.style.display = 'none';
+			        audio.style.position = 'absolute';
+			        audio.style.left = -500;
+			        //audio.controls = true;
+			        audio.addEventListener('ended', eended, false);
+			    }
+			    
+			    function eended(e) {
+			        destroy();
+			        audio.removeEventListener('ended', eended, false);
+			    }
+			    
+			    function destroy() {
+			        audio.parentNode.removeChild(audio);
+			        audio = null;
+			    }
+			    
+			    create(url);
+			    
+			    this.play = function() {
+			        if(audio === null) create(url);
+					audio.play();
+			    }
+			    
+			    this.pause = function() {
+			        audio.pause();
+			    }
+			    
+			    this.stop = function() {
+			        audio.pause();
+			        destroy();
+			    }
+			    
+			    this.stopPlay = function() {
+			        self.stop();
+			        self.play();
+			    }
+			    
+			}
+            */
+            
+			$(document).ready(function() {
+			
+			
+			    //var track = new Track('', );
+			
+			
+				var sound = new CSound('cannon.ogg');
+			
+				$(document.body).append($('<div class="button">play</div>').bind('click',function(e) {
+					sound.play();
+				}));
+				$(document.body).append($('<div class="button">stop</div>').bind('click',function(e) {
+					sound.stop();
+				}));
+				$(document.body).append($('<div class="button">stopPlay</div>').bind('click',function(e) {
+					sound.stopPlay();
+				}));
+				$(document.body).append($('<div class="button">pause</div>').bind('click',function(e) {
+					sound.pause();
+				}));
+				$(document.body).append($('<div class="button">loopOn</div>').bind('click',function(e) {
+					sound.loop(true);
+				}));
+				$(document.body).append($('<div class="button">loopOff</div>').bind('click',function(e) {
+					sound.stop(false);
+				}));
+				$(document.body).append($('<div class="button">muteOn</div>').bind('click',function(e) {
+					sound.mute(true);
+				}));
+				$(document.body).append($('<div class="button">muteOff</div>').bind('click',function(e) {
+					sound.mute(false);
+				}));
+				
+				/*
+				
+				var au = document.createElement('audio');
+				au.id = 'audio';
+				au.src = './cannon.mp3';
+				//au.controls = true;
+				au.play();
+				$(document.body).append(au);
+				$(document.body).append($('<span>play</span>').bind('click',function(e) {
+				
+				    var el = document.getElementById('audio');
+				    
+				    el.play()
+				    
+				    el.currentTime = 0;
+				    
+				}));
+				
+				console.log(typeof Audio);
+				
+				*/
+				/*
+				var au = new Audio(null);
+				au.src = './cannon.mp3';
+				console.log(au.readyState);
+				au.load();
+				setTimeout(function(){au.play(); },10000);
+				
+				$(document.body).append($('<span>play</span>').bind('click',function(e) { au.play(); au.loop = true; }));
+				
+				au.addEventListener('ended', function() {
+				    console.log('end');
+				    au.play();
+				}, false);
+				*/
+				
+				
+				
+			});
+		</script>
+		<style type="text/css">
+			.button {
+				display: inline-block;
+				width: 100px;
+				height: 50px;
+				margin: 5px;
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+    <body style="width: 100%; height: 100%;">
+      <!-- <div id="gamehere" style="width:1020px; height: 600px; position: relative;">
+      </div> -->
+    </body>
+</html>
